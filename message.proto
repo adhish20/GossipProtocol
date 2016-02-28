@@ -1,0 +1,12 @@
+option java_package="com.gossip.protobuf";
+option java_outer_classname = "MessageProtos";
+
+message hearGossipRequest {
+	optional string msg = 1;
+	optional Clock clk = 2; // You have to define the protobuf
+}
+
+message Clock {
+	optional int32 Process = 1;
+	optional int32 Count = 2;
+}
