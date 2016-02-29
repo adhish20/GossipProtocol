@@ -20,7 +20,7 @@ fi
 if [ $TYPE1 -le $ALL ]; then
 	killall java
 	killall rmiregistry
-	python replicate.py $TYPE1 input.txt
+	python replicate.py $TYPE1 $inputFile
 	javac -cp .:protobuf.jar GossipInterface.java Server.java
 	rmiregistry &
 	for id in `seq 1 $ALL`;
