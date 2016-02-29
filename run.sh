@@ -20,6 +20,8 @@ fi
 if [ $TYPE1 -le $ALL ]; then
 	killall java
 	killall rmiregistry
+	sleep 5
+	protoc -I=. --java_out=. message.proto
 	python replicate.py $TYPE1 $inputFile
 	javac -cp .:protobuf.jar GossipInterface.java Server.java
 	rmiregistry &
