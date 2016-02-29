@@ -33,6 +33,7 @@ public class Server implements GossipInterface {
 	public static int getRandom(int High){
 		Random r = new Random();
 		int Low = 1;
+		High++;
 		int Result = r.nextInt(High-Low) + Low;
 		return Result;
 	}
