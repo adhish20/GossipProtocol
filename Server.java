@@ -31,11 +31,11 @@ public class Server implements GossipInterface {
 	}
 
 	public static int getRandom(int High){
-        Random r = new Random();
+		Random r = new Random();
 		int Low = 1;
 		int Result = r.nextInt(High-Low) + Low;
 		return Result;
-    }
+	}
 
 	public void hearGossip(byte[] arr)
 	{
@@ -57,7 +57,7 @@ public class Server implements GossipInterface {
 		catch (Exception e)
 		{
 			System.err.println("Exception: " + e.toString());
-	    	e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -73,7 +73,13 @@ public class Server implements GossipInterface {
 		}
 
 		int p1 = this.getRandom(this.TotalProcesses);
+		while(p1 == req.getClk().getProcess()){
+			p1 = this.getRandom(this.TotalProcesses);
+		}
 		int p2 = this.getRandom(this.TotalProcesses);
+		while(p2 == req.getClk().getProcess()){
+			p2 = this.getRandom(this.TotalProcesses);
+		}
 
 		try
 		{
@@ -85,9 +91,9 @@ public class Server implements GossipInterface {
 			stub2.hearGossip(req.toByteArray());
 		}
 		catch (Exception e) {
-	    	System.err.println("Exception: " + e.toString());
-	    	e.printStackTrace();
-	    }
+			System.err.println("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String args[])
@@ -97,20 +103,18 @@ public class Server implements GossipInterface {
 		{
 			Server obj = new Server(Integer.parseInt(args[1]),Integer.parseInt(args[0]));
 			GossipInterface stub = (GossipInterface) UnicastRemoteObject.exportObject(obj, 0);
-
-			// Bind the remote object's stub in the registry
+			
 			Registry registry = LocateRegistry.getRegistry();
 			registry.bind("Gossip".concat(args[0]), stub);
-			System.err.println("Server ready");
 			Thread.sleep(WaitProcess);
 			if(args.length == 4)
 			{
 				try(BufferedReader br = new BufferedReader(new FileReader(args[3])))
 				{
-				    for(String line; (line = br.readLine()) != null; ) {
-				        obj.processGossip(line, null, 0);
-				        Thread.sleep(obj.WaitTime);
-				    }
+					for(String line; (line = br.readLine()) != null; ) {
+						obj.processGossip(line, null, 0);
+						Thread.sleep(obj.WaitTime);
+					}
 				}
 			}
 		}
